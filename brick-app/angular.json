@@ -23,6 +23,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "qrcode",
+              "@twa-dev/sdk"
+            ],
             "outputPath": "dist/brick-app",
             "index": "src/index.html",
             "main": "src/main.ts",
