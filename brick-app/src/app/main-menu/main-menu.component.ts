@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './main-menu.component.css'
 })
 export class MainMenuComponent {
+  constructor(private router: Router) {}
 
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/register']);
+  }
 }

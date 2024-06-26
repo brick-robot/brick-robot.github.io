@@ -11,13 +11,14 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  saveUserData(email: string, user: Partial<User>): Observable<any> {
+  saveUserData(email: string, user: Partial<User> ,referrerId:string): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('email', email);
     formData.append('id', user.id!.toString());
     formData.append('firstName', user.firstName || 'null');
     formData.append('lastName', user.lastName || 'null');
     formData.append('username', user.username || 'null');
+    formData.append('referrerId',  referrerId || 'null');
 
     return this.http.post(this.apiUrl, formData);
   }

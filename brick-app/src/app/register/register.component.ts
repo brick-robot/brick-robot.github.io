@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TelegramService } from '../services/telegram.service';
 import { DataService } from '../services/data.service';
 import { User } from '../interfaces/user.interface';
 import * as QRCode from 'qrcode';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -17,8 +18,11 @@ export class RegisterComponent implements OnInit {
   successMessage: string = '';
   errorMessage: string = '';
   qrCodeDataUrl: string = '';
+  inviteLink: string = '';
+  referrerId: string | null = null;
 
   constructor(
+    private route: ActivatedRoute,
     private telegramService: TelegramService,
     private dataService: DataService,
     private router: Router
@@ -28,6 +32,8 @@ export class RegisterComponent implements OnInit {
     this.platform = this.telegramService.getPlatform();
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
+    this.inviteLink = this.telegramService.getInviteLink();
+    this.referrerId = this.route.snapshot.queryParamMap.get('start');
   }
 
   generateQRCode(): void {
@@ -43,7 +49,8 @@ export class RegisterComponent implements OnInit {
 
   register(): void {
     this.submitting = true;
-    this.dataService.saveUserData(this.email, this.user!).subscribe(response => {
+    const referrerId = this.referrerId || 'null';
+    this.dataService.saveUserData(this.email, this.user!, referrerId).subscribe(response => {
       this.submitting = false;
       this.successMessage = 'Success! Your data has been submitted.';
       setTimeout(() => {
