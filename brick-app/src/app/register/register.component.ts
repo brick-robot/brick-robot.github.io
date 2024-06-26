@@ -29,6 +29,12 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.MainButton.text = "Close App";
+    tg.MainButton.show();
+    tg.MainButton.onClick(() => tg.close());
+
     this.platform = this.telegramService.getPlatform();
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
@@ -37,6 +43,9 @@ export class RegisterComponent implements OnInit {
     if (this.referrerId) {
       this.telegramService.sendReferrerIdToWebApp(this.referrerId);
     }
+
+    tg.ready();
+    this.updateTheme();
   }
 
   generateQRCode(): void {
@@ -50,22 +59,48 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  updateTheme(): void {
+    const tg = window.Telegram.WebApp;
+    document.body.style.backgroundColor = tg.themeParams.bg_color;
+    document.body.style.color = tg.themeParams.text_color;
+
+    const container = document.querySelector('.container') as HTMLElement;
+    if (container) {
+      container.style.backgroundColor = tg.themeParams.secondary_bg_color;
+    }
+  }
+
   register(): void {
+    if (!this.user) {
+      this.errorMessage = 'User data is not available.';
+      return;
+    }
+
     this.submitting = true;
+
+    // Ensure user.id is set before proceeding
+    const userId = this.user.id;
+    const userFirstName = this.user.firstName || 'null';
+    const userLastName = this.user.lastName || 'null';
+    const userUsername = this.user.username || 'null';
     const referrerId = this.referrerId || 'null';
-    this.dataService.saveUserData(this.email, this.user!, referrerId).subscribe(response => {
-      this.submitting = false;
-      this.successMessage = 'Success! Your data has been submitted.';
-      setTimeout(() => {
-        this.successMessage = '';
-        this.router.navigate(['/']); // Navigate to the main page after registration
-      }, 500);
-    }, error => {
-      this.submitting = false;
-      this.errorMessage = 'Error! There was a problem submitting your data.';
-      setTimeout(() => {
-        this.errorMessage = '';
-      }, 500);
-    });
+
+    this.dataService.saveUserData(this.email, { id: userId, firstName: userFirstName, lastName: userLastName, username: userUsername }, referrerId).subscribe(
+      response => {
+        this.submitting = false;
+        this.successMessage = 'Success! Your data has been submitted.';
+        setTimeout(() => {
+          this.successMessage = '';
+          this.router.navigate(['/']); // Navigate to the main page after registration
+        }, 500);
+      },
+      error => {
+        this.submitting = false;
+        this.errorMessage = 'Error! There was a problem submitting your data.';
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 500);
+      }
+    );
   }
 }
