@@ -9,6 +9,10 @@
     "test": "ng test",
     "deploy": "ng deploy brick-app"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brick-robot/brick-robot.github.io.git"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^18.0.0",
