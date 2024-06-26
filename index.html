@@ -1,17 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brick Builder Game</title>
+    <title>Brick Builder Bot</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+    <div class="header">
+        <div class="score" id="score">Bricks Built: 0</div>
+        <div class="user-info" id="user-info">
+            <img id="user-photo" class="user-photo" src="" alt="User Photo">
+        </div>
+    </div>
     <div class="container">
-        <div class="score">Score: <span id="score">0</span></div>
-        <button class="brick-button" onclick="incrementScore()" disabled></button>
-        <div class="timer" id="timer">Next brick in: 60s</div>
+        <button class="brick-button" id="brick-button" disabled></button>
+        <div id="timer">Next brick in: <span id="timer-text">60s</span></div>
+        <div class="progress-bar" id="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    <div id="user-popup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <div id="user-details"></div>
+            <a href="https://t.me/brick_robot" id="invite-link" target="_blank">Invite Friends</a>
+        </div>
     </div>
     <script src="js/script.js"></script>
 </body>
