@@ -33,7 +33,10 @@ export class RegisterComponent implements OnInit {
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
     this.inviteLink = this.telegramService.getInviteLink();
-    this.referrerId = this.route.snapshot.queryParamMap.get('start');
+    this.referrerId = this.route.snapshot.queryParamMap.get('startapp');
+    if (this.referrerId) {
+      this.telegramService.sendReferrerIdToWebApp(this.referrerId);
+    }
   }
 
   generateQRCode(): void {

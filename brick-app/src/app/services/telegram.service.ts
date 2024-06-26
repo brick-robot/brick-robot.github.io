@@ -79,4 +79,7 @@ export class TelegramService {
     const userId = this.webApp.initDataUnsafe.user?.id;
     return `https://t.me/brick_robot?start=${userId}`;
   }
+  sendReferrerIdToWebApp(referrerId: string): void {
+    this.webApp.sendData(JSON.stringify({ referrerId }));
+  }
 }
