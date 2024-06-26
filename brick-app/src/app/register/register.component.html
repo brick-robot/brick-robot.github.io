@@ -5,12 +5,20 @@
   </div>
 </div>
 <ng-template #mobileForm>
-  <form (ngSubmit)="register()">
+  <form (ngSubmit)="register()" #registerForm="ngForm">
     <div>
       <label for="email">Email:</label>
-      <input type="email" id="email" [(ngModel)]="email" name="email" required>
+      <input type="email" id="email" [(ngModel)]="email" name="email" required email #emailModel="ngModel">
+      <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)">
+        <div *ngIf="emailModel.errors?.['required']">
+          Email is required.
+        </div>
+        <div *ngIf="emailModel.errors?.['email']">
+          Please enter a valid email address.
+        </div>
+      </div>
     </div>
-    <button type="submit" [disabled]="submitting">Submit</button>
+    <button type="submit" [disabled]="submitting || registerForm.invalid">Submit</button>
   </form>
 </ng-template>
 

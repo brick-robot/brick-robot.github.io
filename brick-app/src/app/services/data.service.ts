@@ -18,7 +18,6 @@ export class DataService {
     formData.append('firstName', user.firstName || 'null');
     formData.append('lastName', user.lastName || 'null');
     formData.append('username', user.username || 'null');
-    formData.append('photoUrl', user.photoUrl || 'null');
 
     return this.http.post(this.apiUrl, formData);
   }
