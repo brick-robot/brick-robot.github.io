@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TelegramService } from '../services/telegram.service';
 import { DataService } from '../services/data.service';
-import * as QRCode from 'qrcode';
 import { User } from '../interfaces/user.interface';
-
+import * as QRCode from 'qrcode';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -14,6 +13,9 @@ export class RegisterComponent implements OnInit {
   platform: string | undefined;
   email: string = '';
   user: Partial<User> | null = null;
+  submitting: boolean = false;
+  successMessage: string = '';
+  errorMessage: string = '';
   qrCodeDataUrl: string = '';
 
   constructor(
@@ -29,7 +31,7 @@ export class RegisterComponent implements OnInit {
   }
 
   generateQRCode(): void {
-    const qrData = 'https://t.me/brick_robot'; // Data to be encoded in the QR code
+    const qrData = 'https://t.me/brick_robot';
     QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' }, (err, url) => {
       if (err) {
         console.error('Error generating QR code', err);
@@ -40,24 +42,20 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
-    if (this.user) {
-      const userData: User = {
-        id: this.user.id!,
-        firstName: this.user.firstName || null,
-        lastName: this.user.lastName || null,
-        username: this.user.username || null,
-        photoUrl: this.user.photoUrl || null
-      };
-      this.dataService.saveUserData(this.email, userData)
-        .subscribe(response => {
-          console.log('User registered:', response);
-          this.telegramService.setUserEmail(this.email);
-          this.router.navigate(['/']); // Navigate to the main page after registration
-        }, error => {
-          console.error('Error registering user:', error);
-        });
-    } else {
-      console.error('User data not available');
-    }
+    this.submitting = true;
+    this.dataService.saveUserData(this.email, this.user!).subscribe(response => {
+      this.submitting = false;
+      this.successMessage = 'Success! Your data has been submitted.';
+      setTimeout(() => {
+        this.successMessage = '';
+        this.router.navigate(['/']); // Navigate to the main page after registration
+      }, 500);
+    }, error => {
+      this.submitting = false;
+      this.errorMessage = 'Error! There was a problem submitting your data.';
+      setTimeout(() => {
+        this.errorMessage = '';
+      }, 500);
+    });
   }
 }

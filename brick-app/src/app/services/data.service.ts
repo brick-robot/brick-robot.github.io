@@ -7,12 +7,19 @@ import { User } from '../interfaces/user.interface';
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'https://script.google.com/macros/s/AKfycbxEevK6Hf1VLIYid2lS9OewUxiNaBusWv9iNHLiDmLXaPYyjhwKKjFXaVJkrQuu0j7D/exec';
+  private apiUrl = 'https://script.google.com/macros/s/AKfycbztaPnbTaBPQ7VpPzKyqkUXCDhEmoBDmsOQ-vHpqteIVXReAfLBqd0a_V9j9w2SeI3K/exec';
 
   constructor(private http: HttpClient) { }
 
-  saveUserData(email: string, user: User): Observable<any> {
-    const data = { email, ...user };
-    return this.http.post(this.apiUrl, data);
+  saveUserData(email: string, user: Partial<User>): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('email', email);
+    formData.append('id', user.id!.toString());
+    formData.append('firstName', user.firstName || 'null');
+    formData.append('lastName', user.lastName || 'null');
+    formData.append('username', user.username || 'null');
+    formData.append('photoUrl', user.photoUrl || 'null');
+
+    return this.http.post(this.apiUrl, formData);
   }
 }

@@ -26,6 +26,13 @@ export class TelegramService {
       localStorage.setItem('userLastName', this.initData.user.last_name || '');
       localStorage.setItem('userUsername', this.initData.user.username || '');
       localStorage.setItem('userPhotoUrl', this.initData.user.photo_url || '');
+    } else {
+      // Test data
+      localStorage.setItem('userId', '123456789');
+      localStorage.setItem('userFirstName', 'TestFirstName');
+      localStorage.setItem('userLastName', 'TestLastName');
+      localStorage.setItem('userUsername', 'TestUsername');
+      localStorage.setItem('userPhotoUrl', 'https://example.com/photo.jpg');
     }
   }
 
