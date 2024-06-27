@@ -1,25 +1,44 @@
 import { Injectable } from '@angular/core';
 import { User } from '../interfaces/user.interface';
-import { WebAppInitData, Telegram, ThemeParams, PopupParams, ScanQrPopupParams, EventParams, EventNames, Platforms } from '@twa-dev/types';
+import { WebAppInitData, Telegram, ThemeParams, PopupParams, ScanQrPopupParams, EventParams, EventNames, Platforms, WebApp } from '@twa-dev/types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TelegramService {
-  public webApp: Telegram['WebApp'];
+  public webApp: WebApp  ;
   public initData: WebAppInitData;
 
   constructor() {
-    this.webApp = window.Telegram.WebApp;
-    this.webApp.ready();
-    this.initData = this.webApp.initDataUnsafe;
+    if (window.Telegram && window.Telegram.WebApp) {
+      this.webApp = window.Telegram.WebApp;
 
-    console.log('Telegram WebApp initialized');
-    this.storeUserData();
-    this.initializeMainButton();
-    this.initializeBackButton();
-    this.initializeSettingsButton();
+      this.webApp.ready();
+      this.initData = this.webApp.initDataUnsafe;
+
+      console.log('Telegram WebApp initialized');
+      this.storeUserData();
+
+      this.webApp.expand();
+      this.webApp.MainButton.setText("Close App");
+      this.webApp.MainButton.show();
+      this.webApp.MainButton.onClick(() => this.webApp!.close());
+    } else {
+      console.error('Telegram WebApp is not available');
+    }
   }
+
+  // constructor() {
+  //   this.webApp = window.Telegram.WebApp;
+  //   this.webApp.ready();
+  //   this.initData = this.webApp.initDataUnsafe;
+
+  //   console.log('Telegram WebApp initialized');
+  //   this.storeUserData();
+  //   this.initializeMainButton();
+  //   this.initializeBackButton();
+  //   this.initializeSettingsButton();
+  // }
 
   private storeUserData(): void {
     if (this.initData.user) {
@@ -90,7 +109,7 @@ export class TelegramService {
   sendReferrerIdToWebApp(referrerId: string): void {
     this.webApp.sendData(JSON.stringify({ referrerId }));
   }
- 
+
   // Haptic Feedback Methods
   showNotification(type: 'success' | 'error' | 'warning'): void {
     this.webApp.HapticFeedback.notificationOccurred(type);
