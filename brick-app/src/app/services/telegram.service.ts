@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
+import WebApp from '@twa-dev/sdk';
+
+
 import { User } from '../interfaces/user.interface';
+<<<<<<< HEAD
 import { WebAppInitData, Telegram, ThemeParams, PopupParams, ScanQrPopupParams, EventParams, EventNames, Platforms, WebApp } from '@twa-dev/types';
+=======
+import { WebAppInitData } from '@twa-dev/types';
+>>>>>>> parent of 685601c (Update telegram service)
 
 @Injectable({
   providedIn: 'root'
 })
 export class TelegramService {
+<<<<<<< HEAD
   private webApp!: WebApp;
   private initData!: WebAppInitData;
 
@@ -25,6 +33,19 @@ export class TelegramService {
     } else {
       console.error('Telegram WebApp is not available');
     }
+=======
+  private webApp: typeof WebApp;
+  private initData: WebAppInitData;
+
+  constructor() {
+    this.webApp = WebApp;
+
+    this.webApp.ready();
+    this.initData = this.webApp.initDataUnsafe;
+
+    console.log('Telegram WebApp initialized');
+    this.storeUserData();
+>>>>>>> parent of 685601c (Update telegram service)
   }
 
   private storeUserData(): void {
@@ -41,14 +62,15 @@ export class TelegramService {
       localStorage.setItem('userLastName', 'TestLastName');
       localStorage.setItem('userUsername', 'TestUsername');
       localStorage.setItem('referrerId', '123456780');
+
     }
   }
 
-  getPlatform(): Platforms {
+  getPlatform(): string {
     return this.webApp.platform;
   }
 
-  getThemeParams(): ThemeParams {
+  getThemeParams(): any {
     return this.webApp.themeParams;
   }
 
@@ -75,6 +97,7 @@ export class TelegramService {
     const username = localStorage.getItem('userUsername');
     const referrerId = localStorage.getItem('referrerId');
 
+
     if (id) {
       return {
         id: parseInt(id, 10),
@@ -87,15 +110,14 @@ export class TelegramService {
 
     return null;
   }
-
   getInviteLink(): string {
     const userId = this.webApp.initDataUnsafe.user?.id;
     return `https://t.me/brick_robot?startapp=${userId}`;
   }
-
   sendReferrerIdToWebApp(referrerId: string): void {
     this.webApp.sendData(JSON.stringify({ referrerId }));
   }
+<<<<<<< HEAD
 
   // Haptic Feedback Methods
   showNotification(type: 'success' | 'error' | 'warning'): void {
@@ -261,4 +283,6 @@ export class TelegramService {
     tg.SettingsButton.show();
     tg.SettingsButton.onClick(() => tg.showAlert('Settings Button Clicked'));
   }
+=======
+>>>>>>> parent of 685601c (Update telegram service)
 }
