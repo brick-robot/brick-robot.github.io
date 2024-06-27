@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
 
     tg.BackButton.onClick(goBack);
 
-    
+
     this.platform = this.telegramService.getPlatform();
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
@@ -59,7 +59,10 @@ export class RegisterComponent implements OnInit {
   }
 
   generateQRCode(): void {
-    const qrData = 'https://t.me/brick_robot';
+    const qrData = `https://t.me/brick_robot?startapp=${this.referrerId}`;
+    if (this.referrerId == null) {
+      const qrData = 'https://t.me/brick_robot';
+    }
     QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' }, (err, url) => {
       if (err) {
         console.error('Error generating QR code', err);
