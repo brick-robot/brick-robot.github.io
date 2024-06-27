@@ -3,7 +3,7 @@
   <div class="header">Welcome to the Brick-Building Game!</div>
   <div class="sub-header">Join the fun and start building bricks.</div>
 
-  <div *ngIf="platform === 'desktop'; else mobileForm">
+  <div *ngIf="platform === 'tdesktop'; else mobileForm">
     <div id="qr-code">
       <h2>Scan the QR code with your mobile device to continue.</h2>
       <img [src]="qrCodeDataUrl" alt="QR Code">
