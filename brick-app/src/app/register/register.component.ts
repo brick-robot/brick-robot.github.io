@@ -22,7 +22,6 @@ export class RegisterComponent implements OnInit {
   inviteLink: string = '';
   referrerId: string | null = null;
 
-
   constructor(
     private route: ActivatedRoute,
     private telegramService: TelegramService,
@@ -30,39 +29,19 @@ export class RegisterComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.MainButton.text = "Close App";
-    tg.MainButton.show();
-    tg.MainButton.onClick(() => tg.close());
-
-    tg.BackButton.show();
-    // Click Event
-    const goBack = () => {
-      // Callback code
-    };
-
-    tg.BackButton.onClick(goBack);
-
-
+    this.telegramService.ready();
     this.platform = this.telegramService.getPlatform();
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
     this.inviteLink = this.telegramService.getInviteLink();
     this.referrerId = this.user?.referrerId ? this.user?.referrerId : null;
-    if (this.referrerId) {
-      this.telegramService.sendReferrerIdToWebApp(this.referrerId);
-    }
 
-    tg.ready();
     this.updateTheme();
+    this.initializeMainButton();
   }
 
   generateQRCode(): void {
-    const qrData = `https://t.me/brick_robot?startapp=${this.referrerId}`;
-    if (this.referrerId == null) {
-      const qrData = 'https://t.me/brick_robot';
-    }
+    const qrData = this.referrerId ? `https://t.me/brick_robot?startapp=${this.referrerId}` : 'https://t.me/brick_robot';
     QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' }, (err, url) => {
       if (err) {
         console.error('Error generating QR code', err);
@@ -73,13 +52,13 @@ export class RegisterComponent implements OnInit {
   }
 
   updateTheme(): void {
-    const tg = window.Telegram.WebApp;
-    document.body.style.backgroundColor = tg.themeParams.bg_color;
-    document.body.style.color = tg.themeParams.text_color;
+    const themeParams = this.telegramService.getThemeParams();
+    document.body.style.backgroundColor = themeParams.bg_color;
+    document.body.style.color = themeParams.text_color;
 
     const container = document.querySelector('.container') as HTMLElement;
     if (container) {
-      container.style.backgroundColor = tg.themeParams.secondary_bg_color;
+      container.style.backgroundColor = themeParams.secondary_bg_color;
     }
   }
 
@@ -91,7 +70,6 @@ export class RegisterComponent implements OnInit {
 
     this.submitting = true;
 
-    // Ensure user.id is set before proceeding
     const userId = this.user.id;
     const userFirstName = this.user.firstName || 'null';
     const userLastName = this.user.lastName || 'null';
@@ -102,6 +80,7 @@ export class RegisterComponent implements OnInit {
       response => {
         this.submitting = false;
         this.successMessage = 'Success! Your data has been submitted.';
+        this.telegramService.showNotification('success');
         setTimeout(() => {
           this.successMessage = '';
           this.router.navigate(['/']); // Navigate to the main page after registration
@@ -110,10 +89,15 @@ export class RegisterComponent implements OnInit {
       error => {
         this.submitting = false;
         this.errorMessage = 'Error! There was a problem submitting your data.';
+        this.telegramService.showNotification('error');
         setTimeout(() => {
           this.errorMessage = '';
         }, 500);
       }
     );
+  }
+
+  private initializeMainButton(): void {
+    this.telegramService.setMainButton("Close App", () => this.telegramService.close());
   }
 }
