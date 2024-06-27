@@ -4,7 +4,6 @@ import { TelegramService } from '../services/telegram.service';
 import { DataService } from '../services/data.service';
 import { User } from '../interfaces/user.interface';
 import * as QRCode from 'qrcode';
-import { Telegram } from "@twa-dev/types"
 
 @Component({
   selector: 'app-register',
@@ -14,7 +13,7 @@ import { Telegram } from "@twa-dev/types"
 export class RegisterComponent implements OnInit {
   platform: string | undefined;
   email: string = '';
-  user: Partial<User> | null = null;
+  user: any;
   submitting: boolean = false;
   successMessage: string = '';
   errorMessage: string = '';
@@ -22,47 +21,40 @@ export class RegisterComponent implements OnInit {
   inviteLink: string = '';
   referrerId: string | null = null;
 
-
   constructor(
     private route: ActivatedRoute,
     private telegramService: TelegramService,
     private dataService: DataService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.MainButton.text = "Close App";
-    tg.MainButton.show();
-    tg.MainButton.onClick(() => tg.close());
-
-    tg.BackButton.show();
-    // Click Event
-    const goBack = () => {
-      // Callback code
-    };
-
-    tg.BackButton.onClick(goBack);
-
-
-    this.platform = this.telegramService.getPlatform();
-    this.user = this.telegramService.getUserData();
+    this.initializeTelegramWebApp();
+    this.loadUserData();
     this.generateQRCode();
-    this.inviteLink = this.telegramService.getInviteLink();
-    this.referrerId = this.user?.referrerId ? this.user?.referrerId : null;
-    if (this.referrerId) {
-      this.telegramService.sendReferrerIdToWebApp(this.referrerId);
-    }
-
-    tg.ready();
+    this.setupMainButton();
     this.updateTheme();
   }
 
-  generateQRCode(): void {
-    const qrData = `https://t.me/brick_robot?startapp=${this.referrerId}`;
-    if (this.referrerId == null) {
-      const qrData = 'https://t.me/brick_robot';
+  private initializeTelegramWebApp(): void {
+    this.telegramService.webApp.ready();
+    this.platform = this.telegramService.getPlatform();
+    this.user = this.telegramService.getUserData();
+    this.referrerId = this.route.snapshot.queryParamMap.get('startapp') || null;
+    if (!this.user) {
+      window.location.href = `https://t.me/brick_robot?start=miniapp`;
     }
+  }
+
+  private loadUserData(): void {
+    this.inviteLink = this.telegramService.getInviteLink();
+    if (this.referrerId) {
+      this.telegramService.sendReferrerIdToWebApp(this.referrerId);
+    }
+  }
+
+  generateQRCode(): void {
+    const qrData = this.referrerId ? `https://t.me/brick_robot?startapp=${this.referrerId}` : 'https://t.me/brick_robot';
     QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' }, (err, url) => {
       if (err) {
         console.error('Error generating QR code', err);
@@ -72,14 +64,19 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  updateTheme(): void {
-    const tg = window.Telegram.WebApp;
-    document.body.style.backgroundColor = tg.themeParams.bg_color;
-    document.body.style.color = tg.themeParams.text_color;
+  private setupMainButton(): void {
+    this.telegramService.setMainButton('Close App', () => this.telegramService.webApp.close());
+    this.telegramService.showMainButton();
+  }
 
-    const container = document.querySelector('.container') as HTMLElement;
-    if (container) {
-      container.style.backgroundColor = tg.themeParams.secondary_bg_color;
+  private updateTheme(): void {
+    const themeParams = this.telegramService.getThemeParams();
+    document.body.style.backgroundColor = themeParams.bg_color;
+    document.body.style.color = themeParams.text_color;
+
+    const container = document.querySelector('.container');
+    if (container instanceof HTMLElement) {
+      container.style.backgroundColor = themeParams.secondary_bg_color;
     }
   }
 
@@ -90,26 +87,28 @@ export class RegisterComponent implements OnInit {
     }
 
     this.submitting = true;
+    const userData: Partial<User> = {
+      id: this.user.id!,
+      firstName: this.user.firstName || 'null',
+      lastName: this.user.lastName || 'null',
+      username: this.user.username || 'null',
+      referrerId: this.referrerId || 'null'
+    };
 
-    // Ensure user.id is set before proceeding
-    const userId = this.user.id;
-    const userFirstName = this.user.firstName || 'null';
-    const userLastName = this.user.lastName || 'null';
-    const userUsername = this.user.username || 'null';
-    const referrerId = this.referrerId || 'null';
-
-    this.dataService.saveUserData(this.email, { id: userId, firstName: userFirstName, lastName: userLastName, username: userUsername }, referrerId).subscribe(
+    this.dataService.saveUserData(this.email, userData).subscribe(
       response => {
         this.submitting = false;
         this.successMessage = 'Success! Your data has been submitted.';
+        this.telegramService.showNotification('success');
         setTimeout(() => {
           this.successMessage = '';
-          this.router.navigate(['/']); // Navigate to the main page after registration
+          this.router.navigate(['/']);
         }, 500);
       },
       error => {
         this.submitting = false;
         this.errorMessage = 'Error! There was a problem submitting your data.';
+        this.telegramService.showNotification('error');
         setTimeout(() => {
           this.errorMessage = '';
         }, 500);
