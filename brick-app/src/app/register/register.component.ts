@@ -32,13 +32,11 @@ export class RegisterComponent implements OnInit {
     this.initializeTelegramWebApp();
     this.loadUserData();
     this.generateQRCode();
-    this.setupMainButton();
     this.updateTheme();
   }
 
   private initializeTelegramWebApp(): void {
-    this.telegramService.webApp.ready();
-    this.platform = this.telegramService.getPlatform();
+     this.platform = this.telegramService.getPlatform();
     this.user = this.telegramService.getUserData();
     this.referrerId = this.route.snapshot.queryParamMap.get('startapp') || null;
     if (!this.user) {
@@ -64,10 +62,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  private setupMainButton(): void {
-    this.telegramService.setMainButton('Close App', () => this.telegramService.webApp.close());
-    this.telegramService.showMainButton();
-  }
+
 
   private updateTheme(): void {
     const themeParams = this.telegramService.getThemeParams();
