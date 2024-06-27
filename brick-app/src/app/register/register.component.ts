@@ -4,6 +4,7 @@ import { TelegramService } from '../services/telegram.service';
 import { DataService } from '../services/data.service';
 import { User } from '../interfaces/user.interface';
 import * as QRCode from 'qrcode';
+import { Telegram } from "@twa-dev/types"
 
 @Component({
   selector: 'app-register',
@@ -21,12 +22,12 @@ export class RegisterComponent implements OnInit {
   inviteLink: string = '';
   referrerId: string | null = null;
 
+
   constructor(
     private route: ActivatedRoute,
     private telegramService: TelegramService,
     private dataService: DataService,
-    private router: Router
-  ) { }
+    private router: Router  ) { }
 
   ngOnInit(): void {
     const tg = window.Telegram.WebApp;
@@ -39,7 +40,7 @@ export class RegisterComponent implements OnInit {
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
     this.inviteLink = this.telegramService.getInviteLink();
-    this.referrerId = this.route.snapshot.queryParamMap.get('startapp');
+    this.referrerId = this.user?.referrerId? this.user?.referrerId : null;
     if (this.referrerId) {
       this.telegramService.sendReferrerIdToWebApp(this.referrerId);
     }

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { WebAppInitData } from '../interfaces/web-app-init-data.interface';
 import WebApp from '@twa-dev/sdk';
+
+
 import { User } from '../interfaces/user.interface';
+import { WebAppInitData } from '@twa-dev/types';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class TelegramService {
 
   constructor() {
     this.webApp = WebApp;
+
     this.webApp.ready();
     this.initData = this.webApp.initDataUnsafe;
 
@@ -25,12 +28,15 @@ export class TelegramService {
       localStorage.setItem('userFirstName', this.initData.user.first_name || '');
       localStorage.setItem('userLastName', this.initData.user.last_name || '');
       localStorage.setItem('userUsername', this.initData.user.username || '');
+      localStorage.setItem('referrerId', this.initData.start_param || '');
     } else {
       // Test data
       localStorage.setItem('userId', '123456789');
       localStorage.setItem('userFirstName', 'TestFirstName');
       localStorage.setItem('userLastName', 'TestLastName');
       localStorage.setItem('userUsername', 'TestUsername');
+      localStorage.setItem('referrerId', '123456780');
+
     }
   }
 
@@ -63,6 +69,8 @@ export class TelegramService {
     const firstName = localStorage.getItem('userFirstName');
     const lastName = localStorage.getItem('userLastName');
     const username = localStorage.getItem('userUsername');
+    const referrerId = localStorage.getItem('referrerId');
+
 
     if (id) {
       return {
@@ -70,6 +78,7 @@ export class TelegramService {
         firstName: firstName || null,
         lastName: lastName || null,
         username: username || null,
+        referrerId: referrerId || null
       };
     }
 
@@ -77,7 +86,7 @@ export class TelegramService {
   }
   getInviteLink(): string {
     const userId = this.webApp.initDataUnsafe.user?.id;
-    return `https://t.me/brick_robot?start=${userId}`;
+    return `https://t.me/brick_robot?startapp=${userId}`;
   }
   sendReferrerIdToWebApp(referrerId: string): void {
     this.webApp.sendData(JSON.stringify({ referrerId }));
