@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private telegramService: TelegramService,
     private dataService: DataService,
-    private router: Router  ) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     const tg = window.Telegram.WebApp;
@@ -36,11 +36,20 @@ export class RegisterComponent implements OnInit {
     tg.MainButton.show();
     tg.MainButton.onClick(() => tg.close());
 
+    tg.BackButton.show();
+    // Click Event
+    const goBack = () => {
+      // Callback code
+    };
+
+    tg.BackButton.onClick(goBack);
+
+    
     this.platform = this.telegramService.getPlatform();
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
     this.inviteLink = this.telegramService.getInviteLink();
-    this.referrerId = this.user?.referrerId? this.user?.referrerId : null;
+    this.referrerId = this.user?.referrerId ? this.user?.referrerId : null;
     if (this.referrerId) {
       this.telegramService.sendReferrerIdToWebApp(this.referrerId);
     }
