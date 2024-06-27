@@ -3,37 +3,12 @@ import WebApp from '@twa-dev/sdk';
 
 
 import { User } from '../interfaces/user.interface';
-<<<<<<< HEAD
-import { WebAppInitData, Telegram, ThemeParams, PopupParams, ScanQrPopupParams, EventParams, EventNames, Platforms, WebApp } from '@twa-dev/types';
-=======
 import { WebAppInitData } from '@twa-dev/types';
->>>>>>> parent of 685601c (Update telegram service)
 
 @Injectable({
   providedIn: 'root'
 })
 export class TelegramService {
-<<<<<<< HEAD
-  private webApp!: WebApp;
-  private initData!: WebAppInitData;
-
-  constructor() {
-    if (window.Telegram && window.Telegram.WebApp) {
-      this.webApp = window.Telegram.WebApp;
-      this.webApp.ready();
-      this.initData = this.webApp.initDataUnsafe;
-
-      console.log('Telegram WebApp initialized');
-      this.storeUserData();
-
-      this.webApp.expand();
-      this.webApp.MainButton.setText("Close App");
-      this.webApp.MainButton.show();
-      this.webApp.MainButton.onClick(() => this.webApp.close());
-    } else {
-      console.error('Telegram WebApp is not available');
-    }
-=======
   private webApp: typeof WebApp;
   private initData: WebAppInitData;
 
@@ -45,7 +20,6 @@ export class TelegramService {
 
     console.log('Telegram WebApp initialized');
     this.storeUserData();
->>>>>>> parent of 685601c (Update telegram service)
   }
 
   private storeUserData(): void {
@@ -117,172 +91,4 @@ export class TelegramService {
   sendReferrerIdToWebApp(referrerId: string): void {
     this.webApp.sendData(JSON.stringify({ referrerId }));
   }
-<<<<<<< HEAD
-
-  // Haptic Feedback Methods
-  showNotification(type: 'success' | 'error' | 'warning'): void {
-    this.webApp.HapticFeedback.notificationOccurred(type);
-  }
-
-  // Main Button Methods
-  setMainButton(text: string, onClickCallback: VoidFunction): void {
-    this.webApp.MainButton.setText(text);
-    this.webApp.MainButton.show();
-    this.webApp.MainButton.onClick(onClickCallback);
-  }
-
-  setMainButtonText(text: string): void {
-    this.webApp.MainButton.setText(text);
-  }
-
-  showMainButton(): void {
-    this.webApp.MainButton.show();
-  }
-
-  hideMainButton(): void {
-    this.webApp.MainButton.hide();
-  }
-
-  enableMainButton(): void {
-    this.webApp.MainButton.enable();
-  }
-
-  disableMainButton(): void {
-    this.webApp.MainButton.disable();
-  }
-
-  showMainButtonProgress(leaveActive?: boolean): void {
-    this.webApp.MainButton.showProgress(leaveActive);
-  }
-
-  hideMainButtonProgress(): void {
-    this.webApp.MainButton.hideProgress();
-  }
-
-  // Back Button Methods
-  setBackButton(onClickCallback: VoidFunction): void {
-    this.webApp.BackButton.show();
-    this.webApp.BackButton.onClick(onClickCallback);
-  }
-
-  hideBackButton(): void {
-    this.webApp.BackButton.hide();
-  }
-
-  // Settings Button Methods
-  setSettingsButton(onClickCallback: VoidFunction): void {
-    this.webApp.SettingsButton.show();
-    this.webApp.SettingsButton.onClick(onClickCallback);
-  }
-
-  hideSettingsButton(): void {
-    this.webApp.SettingsButton.hide();
-  }
-
-  // Link Management
-  openLink(url: string): void {
-    this.webApp.openLink(url);
-  }
-
-  openTelegramLink(url: string): void {
-    this.webApp.openTelegramLink(url);
-  }
-
-  // Closing Confirmation and Popups
-  enableClosingConfirmation(): void {
-    this.webApp.enableClosingConfirmation();
-  }
-
-  disableClosingConfirmation(): void {
-    this.webApp.disableClosingConfirmation();
-  }
-
-  showConfirm(message: string, callback?: (confirmed: boolean) => void): void {
-    this.webApp.showConfirm(message, callback);
-  }
-
-  showPopup(params: PopupParams, callback?: (id?: string) => unknown): void {
-    this.webApp.showPopup(params, callback);
-  }
-
-  // QR Code and Clipboard Management
-  showScanQrPopup(params: ScanQrPopupParams, callback?: (text: string) => void | true): void {
-    this.webApp.showScanQrPopup(params, callback);
-  }
-
-  closeScanQrPopup(): void {
-    this.webApp.closeScanQrPopup();
-  }
-
-  readTextFromClipboard(callback?: (text: string) => unknown): void {
-    this.webApp.readTextFromClipboard(callback);
-  }
-
-  // Inline Query and Access Requests
-  switchInlineQuery(query: string, chooseChatTypes?: Array<'users' | 'bots' | 'groups' | 'channels'>): void {
-    this.webApp.switchInlineQuery(query, chooseChatTypes);
-  }
-
-  requestWriteAccess(callback?: (access: boolean) => unknown): void {
-    this.webApp.requestWriteAccess(callback);
-  }
-
-  requestContact(callback?: (access: boolean) => unknown): void {
-    this.webApp.requestContact(callback);
-  }
-
-  // Event Handling
-  onEvent<T extends EventNames>(eventName: T, callback: (params: EventParams[T]) => unknown): void {
-    this.webApp.onEvent(eventName, callback);
-  }
-
-  offEvent<T extends EventNames>(eventName: T, callback: (params: EventParams[T]) => unknown): void {
-    this.webApp.offEvent(eventName, callback);
-  }
-
-  // Utility Methods
-  setHeaderColor(color: 'bg_color' | 'secondary_bg_color' | `#${string}`): void {
-    this.webApp.setHeaderColor(color);
-  }
-
-  setBackgroundColor(color: 'bg_color' | 'secondary_bg_color' | `#${string}`): void {
-    this.webApp.setBackgroundColor(color);
-  }
-
-  isVersionAtLeast(version: string): boolean {
-    return this.webApp.isVersionAtLeast(version);
-  }
-
-  ready(): void {
-    this.webApp.ready();
-  }
-
-  close(): void {
-    this.webApp.close();
-  }
-
-  expand(): void {
-    this.webApp.expand();
-  }
-
-  private initializeMainButton(): void {
-    const tg = this.webApp;
-    tg.MainButton.setText('Close App');
-    tg.MainButton.show();
-    tg.MainButton.onClick(() => tg.close());
-  }
-
-  private initializeBackButton(): void {
-    const tg = this.webApp;
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => tg.close());
-  }
-
-  private initializeSettingsButton(): void {
-    const tg = this.webApp;
-    tg.SettingsButton.show();
-    tg.SettingsButton.onClick(() => tg.showAlert('Settings Button Clicked'));
-  }
-=======
->>>>>>> parent of 685601c (Update telegram service)
 }

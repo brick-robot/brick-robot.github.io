@@ -30,16 +30,6 @@ export class RegisterComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-<<<<<<< HEAD
-    this.initializeTelegramWebApp();
-    this.loadUserData();
-    this.generateQRCode();
-    this.updateTheme();
-  }
-
-  private initializeTelegramWebApp(): void {
-     this.platform = this.telegramService.getPlatform();
-=======
     const tg = window.Telegram.WebApp;
     tg.expand();
     tg.MainButton.text = "Close App";
@@ -56,7 +46,6 @@ export class RegisterComponent implements OnInit {
 
 
     this.platform = this.telegramService.getPlatform();
->>>>>>> parent of 685601c (Update telegram service)
     this.user = this.telegramService.getUserData();
     this.generateQRCode();
     this.inviteLink = this.telegramService.getInviteLink();
@@ -83,14 +72,10 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
-
-=======
   updateTheme(): void {
     const tg = window.Telegram.WebApp;
     document.body.style.backgroundColor = tg.themeParams.bg_color;
     document.body.style.color = tg.themeParams.text_color;
->>>>>>> parent of 685601c (Update telegram service)
 
     const container = document.querySelector('.container') as HTMLElement;
     if (container) {
