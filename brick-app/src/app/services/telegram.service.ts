@@ -6,13 +6,12 @@ import { WebAppInitData, Telegram, ThemeParams, PopupParams, ScanQrPopupParams, 
   providedIn: 'root'
 })
 export class TelegramService {
-  public webApp: WebApp  ;
-  public initData: WebAppInitData;
+  private webApp!: WebApp;
+  private initData!: WebAppInitData;
 
   constructor() {
     if (window.Telegram && window.Telegram.WebApp) {
       this.webApp = window.Telegram.WebApp;
-
       this.webApp.ready();
       this.initData = this.webApp.initDataUnsafe;
 
@@ -22,23 +21,11 @@ export class TelegramService {
       this.webApp.expand();
       this.webApp.MainButton.setText("Close App");
       this.webApp.MainButton.show();
-      this.webApp.MainButton.onClick(() => this.webApp!.close());
+      this.webApp.MainButton.onClick(() => this.webApp.close());
     } else {
       console.error('Telegram WebApp is not available');
     }
   }
-
-  // constructor() {
-  //   this.webApp = window.Telegram.WebApp;
-  //   this.webApp.ready();
-  //   this.initData = this.webApp.initDataUnsafe;
-
-  //   console.log('Telegram WebApp initialized');
-  //   this.storeUserData();
-  //   this.initializeMainButton();
-  //   this.initializeBackButton();
-  //   this.initializeSettingsButton();
-  // }
 
   private storeUserData(): void {
     if (this.initData.user) {
@@ -258,7 +245,7 @@ export class TelegramService {
 
   private initializeMainButton(): void {
     const tg = this.webApp;
-    tg.MainButton.text = 'Close App';
+    tg.MainButton.setText('Close App');
     tg.MainButton.show();
     tg.MainButton.onClick(() => tg.close());
   }
