@@ -1,41 +1,30 @@
 import { Injectable } from '@angular/core';
 import { User } from '../interfaces/user.interface';
-import { WebAppInitData, ThemeParams, PopupParams, ScanQrPopupParams, EventParams, EventNames, Platforms } from '@twa-dev/types';
-import WebApp from '@twa-dev/sdk';
+import { Platform, PopupParams, ThemeParams, retrieveLaunchParams ,initMiniApp, postEvent  } from '@tma.js/sdk';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TelegramService {
-  private webApp: typeof WebApp;
-  private initData!: WebAppInitData;
-
+  private webApp: any;
+  private  miniApp: any;
   constructor() {
-    this.webApp = WebApp;
 
-    if (this.webApp.initDataUnsafe) {
-      this.initData = this.webApp.initDataUnsafe;
+    // Retrieve launch parameters
+     this.webApp = retrieveLaunchParams();
 
-      this.webApp.ready();
-      console.log('Telegram WebApp initialized');
-      this.storeUserData();
-
-      this.webApp.expand();
-      this.webApp.MainButton.setText("Close App");
-      this.webApp.MainButton.show();
-      this.webApp.MainButton.onClick(() => this.webApp.close());
-    } else {
-      console.error('Telegram WebApp is not available');
-    }
+     this.miniApp = initMiniApp();
+    // Store user data on initialization
+    this.storeUserData();
   }
 
   private storeUserData(): void {
-    if (this.initData.user) {
-      localStorage.setItem('userId', this.initData.user.id.toString());
-      localStorage.setItem('userFirstName', this.initData.user.first_name || '');
-      localStorage.setItem('userLastName', this.initData.user.last_name || '');
-      localStorage.setItem('userUsername', this.initData.user.username || '');
-      localStorage.setItem('referrerId', this.initData.start_param || '');
+    if (this.webApp.initData.user) {
+      localStorage.setItem('userId', this.webApp.initData.user.id.toString());
+      localStorage.setItem('userFirstName', this.webApp.initData.user.first_name || '');
+      localStorage.setItem('userLastName', this.webApp.initData.user.last_name || '');
+      localStorage.setItem('userUsername', this.webApp.initData.user.username || '');
+      localStorage.setItem('referrerId', this.webApp.initData.start_param || '');
     } else {
       // Test data
       localStorage.setItem('userId', '123456789');
@@ -46,7 +35,7 @@ export class TelegramService {
     }
   }
 
-  getPlatform(): Platforms {
+  getPlatform(): Platform {
     return this.webApp.platform;
   }
 
@@ -91,7 +80,7 @@ export class TelegramService {
   }
 
   getInviteLink(): string {
-    const userId = this.webApp.initDataUnsafe.user?.id;
+    const userId = this.webApp.initData.user?.id;
     return `https://t.me/brick_robot?startapp=${userId}`;
   }
 
@@ -185,10 +174,7 @@ export class TelegramService {
     this.webApp.showPopup(params, callback);
   }
 
-  // QR Code and Clipboard Management
-  showScanQrPopup(params: ScanQrPopupParams, callback?: (text: string) => void | true): void {
-    this.webApp.showScanQrPopup(params, callback);
-  }
+
 
   closeScanQrPopup(): void {
     this.webApp.closeScanQrPopup();
@@ -211,15 +197,6 @@ export class TelegramService {
     this.webApp.requestContact(callback);
   }
 
-  // Event Handling
-  onEvent<T extends EventNames>(eventName: T, callback: (params: EventParams[T]) => unknown): void {
-    this.webApp.onEvent(eventName, callback);
-  }
-
-  offEvent<T extends EventNames>(eventName: T, callback: (params: EventParams[T]) => unknown): void {
-    this.webApp.offEvent(eventName, callback);
-  }
-
   // Utility Methods
   setHeaderColor(color: 'bg_color' | 'secondary_bg_color' | `#${string}`): void {
     this.webApp.setHeaderColor(color);
@@ -234,14 +211,14 @@ export class TelegramService {
   }
 
   ready(): void {
-    this.webApp.ready();
+    this.miniApp.ready();
   }
 
   close(): void {
-    this.webApp.close();
+    this.miniApp.close();
   }
 
   expand(): void {
-    this.webApp.expand();
+    postEvent('web_app_expand');
   }
 }

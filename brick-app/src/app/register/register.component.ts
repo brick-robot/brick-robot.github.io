@@ -4,7 +4,6 @@ import { TelegramService } from '../services/telegram.service';
 import { DataService } from '../services/data.service';
 import { User } from '../interfaces/user.interface';
 import * as QRCode from 'qrcode';
-import { Telegram } from "@twa-dev/types"
 
 @Component({
   selector: 'app-register',
@@ -36,7 +35,6 @@ export class RegisterComponent implements OnInit {
     this.inviteLink = this.telegramService.getInviteLink();
     this.referrerId = this.user?.referrerId ? this.user?.referrerId : null;
 
-    this.updateTheme();
     this.initializeMainButton();
   }
 
@@ -51,16 +49,6 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  updateTheme(): void {
-    const themeParams = this.telegramService.getThemeParams();
-    document.body.style.backgroundColor = themeParams.bg_color;
-    document.body.style.color = themeParams.text_color;
-
-    const container = document.querySelector('.container') as HTMLElement;
-    if (container) {
-      container.style.backgroundColor = themeParams.secondary_bg_color;
-    }
-  }
 
   register(): void {
     if (!this.user) {
