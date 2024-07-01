@@ -13,11 +13,11 @@ MIT
 @angular/router
 MIT
 
-@twa-dev/sdk
+@tma.js/sdk
 MIT
 MIT License
 
-Copyright (c) 2022 Artur Stambultsian
+Copyright (c) 2020 Vladislav Kibenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
