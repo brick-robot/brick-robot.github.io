@@ -39,10 +39,6 @@ export class RegisterComponent implements OnInit {
     this.updateTheme();
     this.initializeMainButton();
 
-
-    this.checkEmail('miladsoft@yahoo.com');
-    this.getUsersByReferrerId("5515554536");
-
   }
   checkEmail(email: string) {
     this.dataService.checkEmailExists(email)
