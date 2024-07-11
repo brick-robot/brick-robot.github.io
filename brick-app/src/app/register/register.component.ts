@@ -38,7 +38,36 @@ export class RegisterComponent implements OnInit {
 
     this.updateTheme();
     this.initializeMainButton();
+
+
+    this.checkEmail('miladsoft@yahoo.com');
+    this.getUsersByReferrerId("5515554536");
+
   }
+  checkEmail(email: string) {
+    this.dataService.checkEmailExists(email)
+      .subscribe(
+        response => {
+          console.log('Response:', response);
+        },
+        error => {
+          console.error('Error:', error);
+        }
+      );
+  }
+
+  getUsersByReferrerId(referrerId: string) {
+    this.dataService.getUsersByReferrerId(referrerId)
+      .subscribe(
+        response => {
+          console.log('Users by referrerId:', response);
+        },
+        error => {
+          console.error('Error:', error);
+        }
+      );
+  }
+
 
   generateQRCode(): void {
     const qrData = this.referrerId ? `https://t.me/brick_robot?startapp=${this.referrerId}` : 'https://t.me/brick_robot';
@@ -80,6 +109,7 @@ export class RegisterComponent implements OnInit {
       response => {
         this.submitting = false;
         this.successMessage = 'Success! Your data has been submitted.';
+        localStorage.setItem('email', this.email || '');
         this.telegramService.showNotification('success');
         setTimeout(() => {
           this.successMessage = '';
