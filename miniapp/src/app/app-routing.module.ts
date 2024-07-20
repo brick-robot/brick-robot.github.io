@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
-import { MainMenuComponent } from './main-menu/main-menu.component';
+import { HomeComponent } from './home/home.component';
 import { TapComponent } from './tap/tap.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { FarmComponent } from './farm/farm.component';
 import { SquadComponent } from './squad/squad.component';
-import { AuthGuard } from './guards/auth.guard';  
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: MainMenuComponent, canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'tap', component: TapComponent, canActivate: [AuthGuard] },
   { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },

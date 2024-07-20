@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
-import { MainMenuComponent } from './main-menu/main-menu.component';
+import { HomeComponent } from './home/home.component';
 import { TapComponent } from './tap/tap.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { FarmComponent } from './farm/farm.component';
@@ -16,7 +16,7 @@ import { TelegramService } from './services/telegram.service';
   declarations: [
     AppComponent,
     RegisterComponent,
-    MainMenuComponent,
+    HomeComponent,
     TapComponent,
     TasksComponent,
     FarmComponent,
