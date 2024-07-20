@@ -23,6 +23,6 @@ jobs:
 
     - name: Run deploy script
       run: npm run deploy
-      working-directory: brick-app
+      working-directory: miniapp
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
