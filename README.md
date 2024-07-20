@@ -1,1 +1,1 @@
-# brick-robot.github.io
+# rial-robot.github.io
