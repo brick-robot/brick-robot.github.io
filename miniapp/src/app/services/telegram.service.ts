@@ -21,8 +21,8 @@ export class TelegramService {
       this.storeUserData();
 
       this.webApp.expand();
-      this.webApp.MainButton.setText("Close App");
-      this.webApp.MainButton.show();
+      // this.webApp.MainButton.setText("Close App");
+      // this.webApp.MainButton.show();
       this.webApp.MainButton.onClick(() => this.webApp.close());
     } else {
       console.error('Telegram WebApp is not available');
