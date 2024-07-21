@@ -37,7 +37,6 @@ export class RegisterComponent implements OnInit {
     this.referrerId = this.user?.referrerId ? this.user?.referrerId : null;
 
     this.updateTheme();
-    this.initializeMainButton();
 
   }
   checkEmail(email: string) {
@@ -123,7 +122,7 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  private initializeMainButton(): void {
-    this.telegramService.setMainButton("Close App", () => this.telegramService.close());
-  }
+  // private initializeMainButton(): void {
+  //   this.telegramService.setMainButton("Close App", () => this.telegramService.close());
+  // }
 }
