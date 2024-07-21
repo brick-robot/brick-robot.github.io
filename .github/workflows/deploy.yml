@@ -19,7 +19,7 @@ jobs:
 
     - name: Install dependencies
       run: npm install --force
-      working-directory: brick-app
+      working-directory: miniapp
 
     - name: Run deploy script
       run: npm run deploy

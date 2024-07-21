@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "brick-app": {
+    "miniapp": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -27,7 +27,7 @@
               "qrcode",
               "@twa-dev/sdk"
             ],
-            "outputPath": "dist/brick-app",
+            "outputPath": "dist/miniapp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -74,10 +74,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "brick-app:build:production"
+              "buildTarget": "miniapp:build:production"
             },
             "development": {
-              "buildTarget": "brick-app:build:development"
+              "buildTarget": "miniapp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -112,7 +112,7 @@
             "name": "miladsoft",
             "email": "miladsoft@yahoo.com",
             "baseHref": "/",
-            "dir": "dist/brick-app",
+            "dir": "dist/miniapp",
             "repo": "https://github.com/brick-robot/brick-robot.github.io.git",
             "cname": "brick-robot.github.io"
           }
