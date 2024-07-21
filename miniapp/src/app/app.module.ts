@@ -10,8 +10,10 @@ import { HomeComponent } from './home/home.component';
 import { TapComponent } from './tap/tap.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { FarmComponent } from './farm/farm.component';
-import { SquadComponent } from './squad/squad.component';
+import { AirDropComponent } from './airdrop/airdrop.component';
 import { TelegramService } from './services/telegram.service';
+import { LoadingComponent } from './loading/loading.component';
+import { BottomNavigationComponent } from './bottom-navigation/bottom-navigation.component';
  @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +22,9 @@ import { TelegramService } from './services/telegram.service';
     TapComponent,
     TasksComponent,
     FarmComponent,
-    SquadComponent
+    AirDropComponent,
+    LoadingComponent,
+    BottomNavigationComponent
   ],
   imports: [
     BrowserModule,

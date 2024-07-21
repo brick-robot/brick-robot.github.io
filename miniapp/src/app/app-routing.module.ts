@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { TapComponent } from './tap/tap.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { FarmComponent } from './farm/farm.component';
-import { SquadComponent } from './squad/squad.component';
+import { AirDropComponent } from './airdrop/airdrop.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'tap', component: TapComponent, canActivate: [AuthGuard] },
   { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
   { path: 'farm', component: FarmComponent, canActivate: [AuthGuard] },
-  { path: 'squad', component: SquadComponent, canActivate: [AuthGuard] }
+  { path: 'airdrop', component: AirDropComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
