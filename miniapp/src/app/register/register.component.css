@@ -1,3 +1,13 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+}
+
 .container {
   background-color: var(--tg-theme-secondary-bg-color);
   padding: 20px;
@@ -7,6 +17,10 @@
   max-width: 400px;
   width: 100%;
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .header {
@@ -21,20 +35,28 @@
 
 .input-group {
   margin-bottom: 15px;
+  width: 100%;
 }
 
 .input-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: var(--tg-theme-text-color);
 }
 
 .input-group input {
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 button {
@@ -45,11 +67,25 @@ button {
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+  background-color: darken(var(--tg-theme-button-color), 10%);
+  transform: scale(1.05);
 }
 
 button[disabled] {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  text-align: left;
+  margin-top: 5px;
 }
 
 .popup {
